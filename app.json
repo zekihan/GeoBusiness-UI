@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.wambly.geobusiness-ui"
+      "package": "com.wambly.geobusiness_ui"
     },
     "web": {
       "favicon": "./assets/favicon.png"

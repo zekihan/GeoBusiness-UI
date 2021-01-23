@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
+import businessReducer from "./business/businessReducer";
 
 const rootReducer = combineReducers({
-  // manga: mangaReducer,
+  business: businessReducer
 });
 
 export default rootReducer;
