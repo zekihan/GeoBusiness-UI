@@ -3,8 +3,10 @@ import MapView from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import { StyleSheet, Dimensions } from "react-native";
 import * as Location from "expo-location";
+import { useSelector } from "react-redux";
 
 export default function BusinessMapView() {
+  const businessList = useSelector((state) => state.business.businessList);
   const [loc, setLoc] = useState({
     mapRegion: {
       latitude: 30.4237,
@@ -61,11 +63,14 @@ export default function BusinessMapView() {
       showsUserLocation={true}
       showsMyLocationButton={true}
     >
-      <MapView.Marker
-        coordinate={{ latitude: 38.4237, longitude: 27.1428 }}
-        title={"marker.title1"}
-        description={"desss"}
-      />
+      {businessList.map((business) => (
+        <MapView.Marker
+          key={business.id}
+          coordinate={business.location}
+          title={business.name}
+          description={business.email}
+        />
+      ))}
     </MapView>
   );
 }
@@ -74,6 +79,6 @@ const styles = StyleSheet.create({
   map: {
     marginTop: 20,
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height-50,
+    height: Dimensions.get("window").height - 50,
   },
 });

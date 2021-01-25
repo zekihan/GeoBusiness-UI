@@ -1,7 +1,8 @@
-import * as AuthSession from 'expo-auth-session';
-import jwtDecode from 'jwt-decode';
-import * as React from 'react';
-import { Alert, Button, Platform, StyleSheet, Text, View } from 'react-native';
+import * as AuthSession from "expo-auth-session";
+import jwtDecode from "jwt-decode";
+import * as React from "react";
+import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native";
+import fetchBusinessList from "@commons/api/fetchBusinessList";
 
 const auth0ClientId = "0RkrbD08xD6Bi1DuGrWPKSsDdlpiF1VU";
 const authorizationEndpoint = "https://geobusiness.eu.auth0.com/authorize";
@@ -14,18 +15,19 @@ export default function Main({ navigation }) {
     navigation.openDrawer();
   };
   const [name, setName] = React.useState(null);
+  const [jwtToken, setJwtToken] = React.useState(null);
 
   const [request, result, promptAsync] = AuthSession.useAuthRequest(
     {
       redirectUri,
       clientId: auth0ClientId,
       // id_token will return a JWT token
-      responseType: 'id_token',
+      responseType: "id_token",
       // retrieve the user's profile
-      scopes: ['openid', 'profile'],
+      scopes: ["openid", "profile"],
       extraParams: {
         // ideally, this will be a random value
-        nonce: 'nonce',
+        nonce: "nonce",
       },
     },
     { authorizationEndpoint }
@@ -39,21 +41,27 @@ export default function Main({ navigation }) {
     if (result) {
       if (result.error) {
         Alert.alert(
-          'Authentication error',
-          result.params.error_description || 'something went wrong'
+          "Authentication error",
+          result.params.error_description || "something went wrong"
         );
         return;
       }
-      if (result.type === 'success') {
+      if (result.type === "success") {
         // Retrieve the JWT token and decode it
-        const jwtToken = result.params.id_token;
-        const decoded = jwtDecode(jwtToken);
-
+        const _jwtToken = result.params.id_token;
+        const decoded = jwtDecode(_jwtToken);
         const { name } = decoded;
         setName(name);
+        setJwtToken(_jwtToken);
       }
     }
   }, [result]);
+
+  React.useEffect(() => {
+    if (jwtToken) {
+      fetchBusinessList(jwtToken);
+    }
+  }, [jwtToken]);
 
   return (
     <View style={styles.container}>
@@ -64,12 +72,12 @@ export default function Main({ navigation }) {
           <Button title="Log out" onPress={() => setName(null)} />
         </>
       ) : (
-          <Button
-            disabled={!request}
-            title="Log in with Auth0"
-            onPress={() => promptAsync({ useProxy })}
-          />
-        )}
+        <Button
+          disabled={!request}
+          title="Log in with Auth0"
+          onPress={() => promptAsync({ useProxy })}
+        />
+      )}
     </View>
   );
 }

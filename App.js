@@ -3,7 +3,7 @@ import React from "react";
 import "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import Layout from "@components/Layout/Layout";
-import store from "@redux/store";
+import store from "@redux/store"; 
 
 export default function App() {
   return (

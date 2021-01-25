@@ -2,4 +2,4 @@ export {
   fetchBusinessRequest,
   fetchBusinessSuccess,
   fetchBusinessFailure,
-} from "./business/businessActionTypes.js";
+} from "./business/businessActions.js";
