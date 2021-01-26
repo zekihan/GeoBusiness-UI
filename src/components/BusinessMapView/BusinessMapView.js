@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MapView from "react-native-maps";
 import * as Permissions from "expo-permissions";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Text, Dimensions,View } from "react-native";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
 
@@ -49,8 +49,8 @@ export default function BusinessMapView() {
         coords: {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.00922,
+          longitudeDelta: 0.00421,
         },
       },
     });
@@ -68,8 +68,12 @@ export default function BusinessMapView() {
           key={business.id}
           coordinate={business.location}
           title={business.name}
-          description={business.email}
-        />
+          description={business.category}
+        >
+          <View style={{ backgroundColor: "#f0ffff", padding: 10 , borderRadius: 8}}>
+            <Text style={{ fontSize: 9}} >{business.name}</Text>
+          </View>
+        </MapView.Marker>
       ))}
     </MapView>
   );
@@ -79,6 +83,6 @@ const styles = StyleSheet.create({
   map: {
     marginTop: 20,
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height - 50,
+    height: Dimensions.get("window").height - 20,
   },
 });

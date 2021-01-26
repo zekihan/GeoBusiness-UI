@@ -60,6 +60,7 @@ export default function Main({ navigation }) {
   React.useEffect(() => {
     if (jwtToken) {
       fetchBusinessList(jwtToken);
+      console.log(jwtToken)
     }
   }, [jwtToken]);
 
@@ -67,9 +68,10 @@ export default function Main({ navigation }) {
     <View style={styles.container}>
       {name ? (
         <>
-          <Text style={styles.title}>You are logged in, {name}!</Text>
-          <Button onPress={onclick} title="Learn More" color="#841584" />
-          <Button title="Log out" onPress={() => setName(null)} />
+          <Text style={{margin:10}}>You are logged in, {name}!</Text>
+          <Button style={{margin:10}} onPress={onclick} title="Learn More" color="#841584" />
+          <Text></Text>
+          <Button style={{margin:10}} title="Log out" onPress={() => setName(null)} />
         </>
       ) : (
         <Button
