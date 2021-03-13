@@ -1,41 +1,44 @@
-import * as AuthSession from "expo-auth-session";
-import jwtDecode from "jwt-decode";
-import * as React from "react";
-import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native";
-import fetchBusinessList from "@commons/api/fetchBusinessList";
+import * as AuthSession from "expo-auth-session"
+import jwtDecode from "jwt-decode"
+import * as React from "react"
+import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native"
+import fetchBusinessList from "@commons/api/fetchBusinessList"
+import {
+  setUser,
+  setToken,
+  setAuth,
+} from "@redux"
+import store from '@redux/store'
+import { useSelector } from "react-redux"
 
-const auth0ClientId = "0RkrbD08xD6Bi1DuGrWPKSsDdlpiF1VU";
-const authorizationEndpoint = "https://geobusiness.eu.auth0.com/authorize";
+const auth0ClientId = "0RkrbD08xD6Bi1DuGrWPKSsDdlpiF1VU"
+const authorizationEndpoint = "https://geobusiness.eu.auth0.com/authorize"
 
-const useProxy = Platform.select({ web: false, default: true });
-const redirectUri = AuthSession.makeRedirectUri({ useProxy });
+const useProxy = Platform.select({ web: false, default: true })
+const redirectUri = AuthSession.makeRedirectUri({ useProxy })
+const returnUrl = redirectUri
 
 export default function Main({ navigation }) {
-  const onclick = () => {
-    navigation.openDrawer();
-  };
-  const [name, setName] = React.useState(null);
-  const [jwtToken, setJwtToken] = React.useState(null);
+
+  const auth = useSelector((state) => state.auth.auth);
+  const user = useSelector((state) => state.auth.user);
+  console.log(`Redirect URL: ${returnUrl}`)
 
   const [request, result, promptAsync] = AuthSession.useAuthRequest(
     {
+      defaultReturnUrl: returnUrl,
+      returnUrl,
       redirectUri,
       clientId: auth0ClientId,
-      // id_token will return a JWT token
       responseType: "id_token",
-      // retrieve the user's profile
       scopes: ["openid", "profile"],
       extraParams: {
-        // ideally, this will be a random value
         nonce: "nonce",
       },
     },
     { authorizationEndpoint }
-  );
-
-  // Retrieve the redirect URL, add this to the callback URL list
-  // of your Auth0 application.
-  console.log(`Redirect URL: ${redirectUri}`);
+  )
+  // console.log(`Redirect URL: ${redirectUri}`)
 
   React.useEffect(() => {
     if (result) {
@@ -43,35 +46,48 @@ export default function Main({ navigation }) {
         Alert.alert(
           "Authentication error",
           result.params.error_description || "something went wrong"
-        );
-        return;
+        )
+        store.dispatch(setUser(null))
+        store.dispatch(setToken(null))
+        store.dispatch(setAuth(false))
+        return
       }
       if (result.type === "success") {
-        // Retrieve the JWT token and decode it
-        const _jwtToken = result.params.id_token;
-        const decoded = jwtDecode(_jwtToken);
-        const { name } = decoded;
-        setName(name);
-        setJwtToken(_jwtToken);
+        const _jwtToken = result.params.id_token
+        const decoded = jwtDecode(_jwtToken)
+        store.dispatch(setUser(decoded))
+        store.dispatch(setToken(_jwtToken))
+        store.dispatch(setAuth(true))
       }
     }
-  }, [result]);
+  }, [result])
 
   React.useEffect(() => {
-    if (jwtToken) {
-      fetchBusinessList(jwtToken);
-      console.log(jwtToken)
+    if (auth) {
+      console.log(`logged in`)
+
+      fetchBusinessList()
     }
-  }, [jwtToken]);
+  }, [auth])
+
+  const onclick = () => {
+    navigation.openDrawer();
+  };
+
+  const onLogout = () => {
+    store.dispatch(setUser(null))
+    store.dispatch(setToken(null))
+    store.dispatch(setAuth(false))
+  };
 
   return (
     <View style={styles.container}>
-      {name ? (
+      <Button style={{ margin: 10 }} onPress={onclick} title="Learn More" color="#841584" />
+      {auth ? (
         <>
-          <Text style={{margin:10}}>You are logged in, {name}!</Text>
-          <Button style={{margin:10}} onPress={onclick} title="Learn More" color="#841584" />
+          <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text>
           <Text></Text>
-          <Button style={{margin:10}} title="Log out" onPress={() => setName(null)} />
+          <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
         </>
       ) : (
         <Button
@@ -81,7 +97,7 @@ export default function Main({ navigation }) {
         />
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -91,4 +107,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-});
+})

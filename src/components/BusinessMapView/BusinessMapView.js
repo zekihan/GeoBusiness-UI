@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
-import MapView from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import { StyleSheet, Text, Dimensions,View } from "react-native";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
+import { Platform } from 'react-native';
+
+const MapView = Platform.select({
+  ios: () => require('react-native-maps'),
+  android: () => require('react-native-maps'),
+  web: () => <View></View>,
+})();
 
 export default function BusinessMapView() {
   const businessList = useSelector((state) => state.business.businessList);

@@ -6,8 +6,11 @@ import {
   fetchBusinessFailure,
 } from "@redux";
 import store from "@redux/store";
+import { useSelector } from "react-redux";
 
-export default function fetchBusinessList(jwtToken) {
+export default function fetchBusinessList() {
+  const jwtToken = useSelector(state => state.auth.token)
+
   store.dispatch(fetchBusinessRequest());
   axios
     .get(BASE_URL + API.GET_BUSINESS_LIST, {
