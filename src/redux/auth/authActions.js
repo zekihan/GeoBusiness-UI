@@ -2,7 +2,7 @@ import {
     SET_AUTH,
     SET_TOKEN,
     SET_USER,
-} from "./authActionTypes.js"
+} from "./authActionTypes.js";
 
 
 export const setAuth = auth => {

@@ -2,12 +2,15 @@ import {
   FETCH_BUSINESS_REQUEST,
   FETCH_BUSINESS_SUCCESS,
   FETCH_BUSINESS_FAILURE,
+  SET_SELECTED_BUSINESS
 } from "./businessActionTypes.js";
 
 const initialState = {
   businessList: [],
   businessListLoading: false,
   businessListError: "",
+
+  selectedBusiness: null,
 };
 
 const businessReducer = (state = initialState, action) => {
@@ -30,6 +33,12 @@ const businessReducer = (state = initialState, action) => {
         businessList: [],
         businessListLoading: false,
         businessListError: action.payload,
+      };
+
+    case SET_SELECTED_BUSINESS:
+      return {
+        ...state,
+        selectedBusiness: action.payload,
       };
     default:
       return state;
