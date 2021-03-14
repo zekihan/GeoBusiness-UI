@@ -1,22 +1,21 @@
 import React from 'react'
-import { TouchableOpacity } from "react-native-gesture-handler";
 import {
     setSelectedBusiness
 } from "@redux"
 import { Text } from 'react-native-elements';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import store from '@redux/store';
 
 export default function BusinessListViewItem({ navigation, item }) {
     const goToDetailScreen = (item) => {
-        console.log(item)
         if (item) {
-            setSelectedBusiness(item)
+            store.dispatch(setSelectedBusiness(item));
             navigation.navigate('BusinessDetail');
         }
     }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={goToDetailScreen(item)} >
+        <TouchableOpacity style={styles.container} onPress={() => goToDetailScreen(item)} >
             <Text style={styles.itemTitle}>{item.title}</Text>
             <Text style={styles.itemDescription}>{item.description}</Text>
         </TouchableOpacity>
@@ -26,6 +25,7 @@ export default function BusinessListViewItem({ navigation, item }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        borderBottomWidth: 2
     },
     itemTitle: {
         fontSize: 18,

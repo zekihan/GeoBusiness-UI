@@ -1,8 +1,17 @@
-import React, { } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import React from "react";
+import { StyleSheet, View, FlatList } from "react-native";
 import BusinessListViewItem from '@components/BusinessListViewItem/BusinessListViewItem'
+import { HeaderBackButton } from "@react-navigation/stack";
 
 export default function BusinessListView({ navigation }) {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <HeaderBackButton onPress={() => navigation.goBack()} title="BusinessListView" />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

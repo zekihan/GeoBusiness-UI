@@ -65,7 +65,7 @@ export default function Main({ navigation }) {
   }, [auth])
 
   const onclick = () => {
-    navigation.openDrawer();
+    navigation.navigate('BusinessListView');
   };
 
   const onLogout = () => {
