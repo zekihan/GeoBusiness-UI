@@ -4,7 +4,6 @@ import {
     SET_USER,
 } from "./authActionTypes.js";
 
-
 export const setAuth = auth => {
     return {
         type: SET_AUTH,
