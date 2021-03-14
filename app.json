@@ -2,6 +2,7 @@
   "expo": {
     "name": "GeoBusiness-UI",
     "scheme": "geobusiness-ui",
+    "owner": "wambly",
     "slug": "GeoBusiness-UI",
     "version": "1.0.0",
     "orientation": "portrait",
