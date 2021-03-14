@@ -1,6 +1,6 @@
 import * as AuthSession from "expo-auth-session"
 import jwtDecode from "jwt-decode"
-import * as React from "react"
+import React, { useEffect } from "react"
 import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native"
 import fetchBusinessList from "@commons/api/fetchBusinessList"
 import {
@@ -16,18 +16,14 @@ const authorizationEndpoint = "https://geobusiness.eu.auth0.com/authorize"
 
 const useProxy = Platform.select({ web: false, default: true })
 const redirectUri = AuthSession.makeRedirectUri({ useProxy })
-const returnUrl = redirectUri
 
 export default function Main({ navigation }) {
 
   const auth = useSelector((state) => state.auth.auth);
   const user = useSelector((state) => state.auth.user);
-  console.log(`Redirect URL: ${returnUrl}`)
 
   const [request, result, promptAsync] = AuthSession.useAuthRequest(
     {
-      defaultReturnUrl: returnUrl,
-      returnUrl,
       redirectUri,
       clientId: auth0ClientId,
       responseType: "id_token",
@@ -40,7 +36,7 @@ export default function Main({ navigation }) {
   )
   // console.log(`Redirect URL: ${redirectUri}`)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (result) {
       if (result.error) {
         Alert.alert(
@@ -62,16 +58,14 @@ export default function Main({ navigation }) {
     }
   }, [result])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (auth) {
-      console.log(`logged in`)
-
       fetchBusinessList()
     }
   }, [auth])
 
   const onclick = () => {
-    navigation.openDrawer();
+    navigation.navigate('BusinessListView');
   };
 
   const onLogout = () => {
@@ -86,7 +80,6 @@ export default function Main({ navigation }) {
       {auth ? (
         <>
           <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text>
-          <Text></Text>
           <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
         </>
       ) : (

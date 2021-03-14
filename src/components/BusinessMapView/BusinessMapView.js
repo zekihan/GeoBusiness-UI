@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as Permissions from "expo-permissions";
-import { StyleSheet, Text, Dimensions,View } from "react-native";
+import { StyleSheet, Text, Dimensions, View } from "react-native";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
 import { Platform } from 'react-native';
+import { HeaderBackButton } from "@react-navigation/stack";
 
 const MapView = Platform.select({
   ios: () => require('react-native-maps'),
@@ -11,7 +12,7 @@ const MapView = Platform.select({
   web: () => <View></View>,
 })();
 
-export default function BusinessMapView() {
+export default function BusinessMapView({ navigation }) {
   const businessList = useSelector((state) => state.business.businessList);
   const [loc, setLoc] = useState({
     mapRegion: {
@@ -62,6 +63,14 @@ export default function BusinessMapView() {
     });
   };
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <HeaderBackButton onPress={() => navigation.goBack()} title="BusinessListView" />
+      ),
+    });
+  }, [navigation]);
+
   return (
     <MapView
       style={styles.map}
@@ -76,8 +85,8 @@ export default function BusinessMapView() {
           title={business.name}
           description={business.category}
         >
-          <View style={{ backgroundColor: "#f0ffff", padding: 10 , borderRadius: 8}}>
-            <Text style={{ fontSize: 9}} >{business.name}</Text>
+          <View style={{ backgroundColor: "#f0ffff", padding: 10, borderRadius: 8 }}>
+            <Text style={{ fontSize: 9 }} >{business.name}</Text>
           </View>
         </MapView.Marker>
       ))}
