@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as Permissions from "expo-permissions";
-import { StyleSheet, Text, Dimensions, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, Dimensions, View } from "react-native";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
 import MapView from "react-native-maps";
-import { FontAwesome } from '@expo/vector-icons';
 
 export default function BusinessMapView({ navigation }) {
   const businessList = useSelector((state) => state.business.businessList);
@@ -57,10 +56,6 @@ export default function BusinessMapView({ navigation }) {
     });
   };
 
-  const switchView = () => {
-    navigation.navigate('BusinessListView')
-  }
-
   return (
     <View>
       <MapView
@@ -82,9 +77,6 @@ export default function BusinessMapView({ navigation }) {
           </MapView.Marker>
         ))}
       </MapView>
-      <TouchableOpacity style={styles.overlay} onPress={() => switchView()}>
-        <FontAwesome name="exchange" size={24} color="black" />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -94,11 +86,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height - 20,
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
 });

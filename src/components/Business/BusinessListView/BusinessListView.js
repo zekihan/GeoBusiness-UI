@@ -1,14 +1,8 @@
 import React from "react";
-import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import BusinessListViewItem from '@components/Business/BusinessListViewItem/BusinessListViewItem'
-import { FontAwesome } from '@expo/vector-icons';
 
 export default function BusinessListView({ navigation }) {
-
-  const switchView = () => {
-    navigation.navigate('BusinessMapView')
-  }
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -71,9 +65,6 @@ export default function BusinessListView({ navigation }) {
         ]}
         renderItem={({ item }) => <BusinessListViewItem navigation={navigation} item={item} />}
       />
-      <TouchableOpacity style={styles.overlay} onPress={() => switchView()}>
-        <FontAwesome name="exchange" size={24} color="black" />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -81,13 +72,11 @@ export default function BusinessListView({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
-    padding: 10,
-  },
-  overlay: {
     position: 'absolute',
     top: 0,
-    right: 0,
-    backgroundColor: 'rgba(255, 255, 255, 1)',
-  },
+    left: 0,
+    width:'100%',
+    paddingTop: 22,
+    padding: 10,
+  }
 });
