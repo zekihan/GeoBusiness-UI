@@ -2,6 +2,8 @@ import * as AuthSession from "expo-auth-session"
 import jwtDecode from "jwt-decode"
 import * as React from "react"
 import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native"
+import * as FileSystem from 'expo-file-system';
+
 import fetchBusinessList from "@commons/api/fetchBusinessList"
 import {
     setUser,
@@ -22,7 +24,6 @@ export default function Main({ navigation }) {
 
     const auth = useSelector((state) => state.auth.auth);
     const user = useSelector((state) => state.auth.user);
-    console.log(`Redirect URL: ${returnUrl}`)
 
     const [request, result, promptAsync] = AuthSession.useAuthRequest(
         {
@@ -47,17 +48,23 @@ export default function Main({ navigation }) {
                     "Authentication error",
                     result.params.error_description || "something went wrong"
                 )
-                store.dispatch(setUser(null))
-                store.dispatch(setToken(null))
-                store.dispatch(setAuth(false))
+                onLogout()
                 return
             }
             if (result.type === "success") {
                 const _jwtToken = result.params.id_token
-                const decoded = jwtDecode(_jwtToken)
-                store.dispatch(setUser(decoded))
-                store.dispatch(setToken(_jwtToken))
-                store.dispatch(setAuth(true))
+
+                let fileUri = FileSystem.documentDirectory + "token";
+                FileSystem.writeAsStringAsync(fileUri, _jwtToken, { encoding: FileSystem.EncodingType.UTF8 })
+                    .then(() => {
+                        const decoded = jwtDecode(_jwtToken)
+                        store.dispatch(setUser(decoded))
+                        store.dispatch(setToken(_jwtToken))
+                        store.dispatch(setAuth(true))
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
             }
         }
     }, [result])
@@ -69,9 +76,16 @@ export default function Main({ navigation }) {
     }, [auth])
 
     const onLogout = () => {
-        store.dispatch(setUser(null))
-        store.dispatch(setToken(null))
-        store.dispatch(setAuth(false))
+        let fileUri = FileSystem.documentDirectory + "token";
+        FileSystem.deleteAsync(fileUri)
+            .then(() => {
+                store.dispatch(setAuth(false))
+                store.dispatch(setToken(null))
+                store.dispatch(setUser(null))
+            })
+            .catch(error => {
+                console.error(error);
+            });
     };
 
     return (
