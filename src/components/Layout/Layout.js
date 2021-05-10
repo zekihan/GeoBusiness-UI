@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import MainStack from "@components/Main/MainStack/MainStack";
 import BusinessStack from '@components/Business/BusinessStack/BusinessStack';
+import ChatStack from '@components/Chat/ChatStack/ChatStack';
 
 import * as FileSystem from 'expo-file-system';
 
@@ -70,14 +71,19 @@ export default function Layout() {
                     } else if (route.name === 'Business') {
                         return <MaterialCommunityIcons name="google-my-business" size={size} color={color} />
                     }
+                    else if (route.name === 'Chat') {
+                        return <MaterialCommunityIcons name="chat" size={size} color={color} />
+                    }
                 },
             })}
             tabBarOptions={{
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'gray',
+                keyboardHidesTabBar: true,
             }}>
             <Tab.Screen name="Main" component={MainStack} />
             <Tab.Screen name="Business" component={BusinessStack} />
+            <Tab.Screen name="Chat" component={ChatStack} />
         </Tab.Navigator>
     );
 }

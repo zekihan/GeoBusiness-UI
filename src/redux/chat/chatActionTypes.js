@@ -1,0 +1,1 @@
+export const SET_SELECTED_CHAT = "SET_SELECTED_CHAT"

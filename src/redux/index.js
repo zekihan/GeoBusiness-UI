@@ -11,3 +11,7 @@ export {
 
     setSelectedBusiness,
 } from "./business/businessActions"
+
+export {
+    setSelectedChat,
+} from "./chat/chatActions"
