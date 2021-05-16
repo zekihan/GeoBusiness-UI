@@ -5,9 +5,12 @@ import BusinessListView from '@components/Business/BusinessListView/BusinessList
 
 import { StyleSheet, Platform, View, TouchableOpacity } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
 
 export default function BusinessView({ navigation }) {
+
+    const businessList = useSelector((state) => state.business.businessList);
 
     const [viewMode, setViewMode] = useState(Platform.OS !== 'web' ? 'BusinessMapView' : 'BusinessListView')
 
@@ -32,8 +35,8 @@ export default function BusinessView({ navigation }) {
                 Platform.OS === 'web' ?
                     <BusinessListView /> :
                     viewMode === 'BusinessListView' ?
-                        <BusinessListView navigation={navigation} /> :
-                        <BusinessMapView navigation={navigation} />
+                        <BusinessListView navigation={navigation} businessList={businessList} /> :
+                        <BusinessMapView navigation={navigation} businessList={businessList} />
             }
         </View>
     )

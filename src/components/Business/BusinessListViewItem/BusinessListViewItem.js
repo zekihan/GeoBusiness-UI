@@ -16,8 +16,8 @@ export default function BusinessListViewItem({ navigation, item }) {
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => goToDetailScreen(item)} >
-            <Text style={styles.itemTitle}>{item.title}</Text>
-            <Text style={styles.itemDescription}>{item.description}</Text>
+            <Text style={styles.itemTitle}  numberOfLines={2}>{item.name}</Text>
+            <Text style={styles.itemDescription}>{item.category}</Text>
         </TouchableOpacity>
     );
 }

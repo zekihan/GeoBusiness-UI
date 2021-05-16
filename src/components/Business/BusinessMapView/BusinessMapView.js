@@ -4,9 +4,14 @@ import { StyleSheet, Text, Dimensions, View } from "react-native";
 import * as Location from "expo-location";
 import { useSelector } from "react-redux";
 import MapView from "react-native-maps";
+import store from '@redux/store';
+import {
+  setSelectedBusiness
+} from "@redux"
 
 export default function BusinessMapView({ navigation }) {
   const businessList = useSelector((state) => state.business.businessList);
+
   const [loc, setLoc] = useState({
     mapRegion: {
       latitude: 30.4237,
@@ -56,6 +61,13 @@ export default function BusinessMapView({ navigation }) {
     });
   };
 
+  const goToDetailScreen = (item) => {
+    if (item) {
+      store.dispatch(setSelectedBusiness(item));
+      navigation.navigate('BusinessDetail');
+    }
+  }
+
   return (
     <View>
       <MapView
@@ -68,11 +80,12 @@ export default function BusinessMapView({ navigation }) {
           <MapView.Marker
             key={business.id}
             coordinate={business.location}
-            title={business.name}
+            title={business.name.length > 30 ? business.name.substring(0, 30) + "..." : business.name}
             description={business.category}
+            onCalloutPress={(e) => goToDetailScreen(business)}
           >
             <View style={{ backgroundColor: "#f0ffff", padding: 10, borderRadius: 8 }}>
-              <Text style={{ fontSize: 9 }} >{business.name}</Text>
+              <Text style={{ fontSize: 9 }} >{business.name.length > 10 ? business.name.substring(0, 10) + "..." : business.name}</Text>
             </View>
           </MapView.Marker>
         ))}
