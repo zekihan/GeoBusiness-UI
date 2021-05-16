@@ -12,6 +12,10 @@ import {
 } from "@redux"
 import store from '@redux/store'
 import { useSelector } from "react-redux"
+import { useEffect } from "react";
+import { useState } from "react";
+import { Input } from "react-native-elements";
+import Address from "../Address/Address";
 
 const auth0ClientId = "0RkrbD08xD6Bi1DuGrWPKSsDdlpiF1VU"
 const authorizationEndpoint = "https://geobusiness.eu.auth0.com/authorize"
@@ -41,7 +45,9 @@ export default function Main({ navigation }) {
     )
     // console.log(`Redirect URL: ${redirectUri}`)
 
-    React.useEffect(() => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
         if (result) {
             if (result.error) {
                 Alert.alert(
@@ -69,7 +75,7 @@ export default function Main({ navigation }) {
         }
     }, [result])
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (auth) {
             fetchBusinessList()
         }
@@ -93,7 +99,9 @@ export default function Main({ navigation }) {
             {auth ? (
                 <>
                     <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text>
+                    <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} />
                     <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
+                    <Address modalVisible={modalVisible} setModalVisible={setModalVisible} />
                 </>
             ) : (
                 <Button
@@ -113,4 +121,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    formContainer: {
+        width: "100%",
+        height: "100px",
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
+    }
 })

@@ -18,6 +18,20 @@ export default function Chat({ navigation }) {
           name: selectedChat.name,
           avatar: selectedChat.photo,
         },
+        quickReplies: {
+          type: 'radio', // 'radio' or 'checkbox',
+          keepIt: true,
+          values: [
+            {
+              title: 'Mark As Order',
+              value: 1,
+            },
+            {
+              title: 'Mark As Order',
+              value: 2,
+            }
+          ],
+        },
       },
     ])
   }, [])
