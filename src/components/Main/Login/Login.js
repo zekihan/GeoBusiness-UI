@@ -5,6 +5,7 @@ import { Alert, Button, Platform, StyleSheet, Text, View } from "react-native"
 import * as FileSystem from 'expo-file-system';
 
 import fetchBusinessList from "@commons/api/fetchBusinessList"
+import fetchChatList from "@commons/api/fetchChatList"
 import {
     setUser,
     setToken,
@@ -78,6 +79,7 @@ export default function Main({ navigation }) {
     useEffect(() => {
         if (auth) {
             fetchBusinessList()
+            fetchChatList()
         }
     }, [auth])
 

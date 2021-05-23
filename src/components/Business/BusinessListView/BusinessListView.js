@@ -8,6 +8,7 @@ export default function BusinessListView({ navigation, businessList }) {
       <FlatList
         data={businessList}
         renderItem={({ item }) => <BusinessListViewItem navigation={navigation} item={item} />}
+        keyExtractor={item => item.id.toString()}
       />
     </View>
   );

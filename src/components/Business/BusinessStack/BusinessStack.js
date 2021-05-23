@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 
 import BusinessView from '@components/Business/BusinessView/BusinessView';
 import BusinessDetail from '@components/Business/BusinessDetail/BusinessDetail';
+import Chat from '@components/Chat/Chat/Chat';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,10 @@ export default function BusinessStack() {
             <Stack.Screen
                 name="BusinessDetail"
                 component={BusinessDetail}
+            />
+            <Stack.Screen
+                name="ChatForBusiness"
+                component={Chat}
             />
         </Stack.Navigator>
     );

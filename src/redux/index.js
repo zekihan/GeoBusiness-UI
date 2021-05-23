@@ -14,4 +14,16 @@ export {
 
 export {
     setSelectedChat,
+
+    fetchChatRequest,
+    fetchChatSuccess,
+    fetchChatFailure,
+
+    postMessageRequest,
+    postMessageSuccess,
+    postMessageError,
+
+    putMessageRequest,
+    putMessageSuccess,
+    putMessageError,
 } from "./chat/chatActions"

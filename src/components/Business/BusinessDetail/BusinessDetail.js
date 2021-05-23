@@ -7,12 +7,19 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { Dimensions } from 'react-native';
 import StarRating from "react-native-star-rating";
+import {
+  setSelectedChat,
+  fetchChatSuccess,
+} from "@redux"
+import store from '@redux/store';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function BusinessDetail({ navigation }) {
   const selectedBusiness = useSelector((state) => state.business.selectedBusiness);
+  const chatList = useSelector(state => state.chat.chatList)
+  const user = useSelector(state => state.auth.user)
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,7 +30,20 @@ export default function BusinessDetail({ navigation }) {
   }, [navigation]);
 
   const onChat = () => {
-
+    let chat = chatList.find(_chat => _chat.business.id === selectedBusiness.id)
+    if (chat) {
+      store.dispatch(setSelectedChat(chat));
+    }
+    else {
+      chat = {
+        consumer: user,
+        business: selectedBusiness,
+        messages: []
+      }
+      store.dispatch(fetchChatSuccess([chat, ...chatList]));
+      store.dispatch(setSelectedChat(chat));
+    }
+    navigation.navigate('ChatForBusiness');
   }
 
   return (
@@ -43,18 +63,23 @@ export default function BusinessDetail({ navigation }) {
               rating={selectedBusiness.rate}
               fullStarColor={'gold'}
             />
+            <Button title="Chat" onPress={onChat} />
           </View>
         </View>
 
         {
           selectedBusiness.products.map((category) => {
             return (
-              <View style={styles.card}>
+              <View style={styles.card}
+                key={category.category}
+              >
                 <Text style={styles.cardTittle}>{category.category}</Text>
                 {
                   category.items.map((item) => {
                     return (
-                      <Text>{item}</Text>
+                      <Text
+                        key={item}
+                      >{item}</Text>
                     )
                   })
                 }
