@@ -6,6 +6,7 @@ import BusinessListView from '@components/Business/BusinessListView/BusinessList
 import { StyleSheet, Platform, View, TouchableOpacity } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 
 export default function BusinessView({ navigation }) {
@@ -14,23 +15,29 @@ export default function BusinessView({ navigation }) {
 
     const [viewMode, setViewMode] = useState(Platform.OS !== 'web' ? 'BusinessMapView' : 'BusinessListView')
 
-    const switchView = () => {
-        if (viewMode === 'BusinessListView') {
-            setViewMode('BusinessMapView')
+    useEffect(() => {
+        const switchView = () => {
+            if (viewMode === 'BusinessListView') {
+                setViewMode('BusinessMapView')
+            }
+            if (viewMode === 'BusinessMapView') {
+                setViewMode('BusinessListView')
+            }
         }
-        if (viewMode === 'BusinessMapView') {
-            setViewMode('BusinessListView')
-        }
-    }
 
-    return (
-        <View>
-            {
-                Platform.OS !== 'web' &&
+        navigation.setOptions({
+            headerRight: () => (
                 <TouchableOpacity style={styles.overlay} onPress={() => switchView()}>
                     <FontAwesome name="exchange" size={24} color="black" />
                 </TouchableOpacity>
-            }
+            ),
+        });
+    }, [navigation, viewMode]);
+
+
+
+    return (
+        <View>
             {
                 Platform.OS === 'web' ?
                     <BusinessListView /> :
@@ -44,9 +51,8 @@ export default function BusinessView({ navigation }) {
 
 const styles = StyleSheet.create({
     overlay: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        backgroundColor: 'rgba(255, 255, 255, 1)',
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });

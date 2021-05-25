@@ -96,8 +96,7 @@ export default function BusinessMapView({ navigation }) {
 
 const styles = StyleSheet.create({
   map: {
-    marginTop: 20,
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height - 20,
+    height: Dimensions.get("window").height,
   },
 });
