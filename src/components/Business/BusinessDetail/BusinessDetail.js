@@ -43,7 +43,7 @@ export default function BusinessDetail({ navigation }) {
       store.dispatch(fetchChatSuccess([chat, ...chatList]));
       store.dispatch(setSelectedChat(chat));
     }
-    navigation.navigate('ChatForBusiness');
+    navigation.navigate('Chat');
   }
 
   return (
@@ -67,6 +67,15 @@ export default function BusinessDetail({ navigation }) {
           </View>
         </View>
 
+        <View style={styles.card}>
+          <Text style={styles.cardTittle}>Information</Text>
+          <Text>category: {selectedBusiness.category}</Text>
+          <Text>email: {selectedBusiness.email}</Text>
+          <Text>phone: {selectedBusiness.phone}</Text>
+          <Text>authorizedPerson: {selectedBusiness.authorizedPerson}</Text>
+          <Text>minOrderCost: {selectedBusiness.minOrderCost}</Text>
+          <Text>maxServiceRange: {selectedBusiness.maxServiceRange}</Text>
+        </View>
         {
           selectedBusiness.products.map((category) => {
             return (
@@ -111,7 +120,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     padding: 10,
-    height: 100,
     marginTop: 10,
   },
   profileCard: {

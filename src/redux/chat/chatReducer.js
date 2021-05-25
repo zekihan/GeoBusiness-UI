@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Message } from "react-native-gifted-chat";
 import {
   SET_SELECTED_CHAT,
@@ -62,7 +63,9 @@ const chatReducer = (state = initialState, action) => {
     case POST_MESSAGE_SUCCESS:
       let copyOfSelectedChatForPostMessageSuccess = Object.assign({}, state.selectedChat)
       copyOfSelectedChatForPostMessageSuccess.messages = [action.payload, ...copyOfSelectedChatForPostMessageSuccess.messages]
-      let copyOfChatListForPostMessageSuccess = Object.assign([], state.chatList)
+      copyOfSelectedChatForPostMessageSuccess.messages = copyOfSelectedChatForPostMessageSuccess.messages.sort(function (a, b) {
+        return moment(b.createdAt) - moment(a.createdAt)
+      }); let copyOfChatListForPostMessageSuccess = Object.assign([], state.chatList)
       copyOfChatListForPostMessageSuccess = copyOfChatListForPostMessageSuccess.filter(chat => chat.business.id !== copyOfSelectedChatForPostMessageSuccess.business.id)
       copyOfChatListForPostMessageSuccess = [copyOfSelectedChatForPostMessageSuccess, ...copyOfChatListForPostMessageSuccess]
       return {
@@ -89,6 +92,9 @@ const chatReducer = (state = initialState, action) => {
       let copyOfSelectedChatMessageForPutMessageSuccess = copyOfSelectedChatForPutMessageSuccess.messages
       copyOfSelectedChatMessageForPutMessageSuccess = copyOfSelectedChatMessageForPutMessageSuccess.filter(message => message._id !== action.payload.id)
       copyOfSelectedChatMessageForPutMessageSuccess = [action.payload, ...copyOfSelectedChatMessageForPutMessageSuccess]
+      copyOfSelectedChatMessageForPutMessageSuccess = copyOfSelectedChatMessageForPutMessageSuccess.sort(function (a, b) {
+        return moment(b.createdAt) - moment(a.createdAt)
+      });
       copyOfSelectedChatForPutMessageSuccess.messages = copyOfSelectedChatMessageForPutMessageSuccess
       let copyOfChatListForPutMessageSuccess = Object.assign([], state.chatList)
       copyOfChatListForPutMessageSuccess = copyOfChatListForPutMessageSuccess.filter(chat => chat.business.id !== copyOfSelectedChatForPutMessageSuccess.business.id)

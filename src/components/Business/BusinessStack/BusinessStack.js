@@ -22,7 +22,7 @@ export default function BusinessStack() {
                 component={BusinessDetail}
             />
             <Stack.Screen
-                name="ChatForBusiness"
+                name="Chat"
                 component={Chat}
             />
         </Stack.Navigator>

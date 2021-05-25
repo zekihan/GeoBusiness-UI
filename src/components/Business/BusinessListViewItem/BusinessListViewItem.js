@@ -2,9 +2,9 @@ import React from 'react'
 import {
     setSelectedBusiness
 } from "@redux"
+import store from '@redux/store';
 import { Text } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import store from '@redux/store';
 import { View } from 'react-native';
 import { Image } from 'react-native';
 

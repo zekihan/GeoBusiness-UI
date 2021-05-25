@@ -6,11 +6,17 @@ import { IS_ORDER_STRING_SET } from "@commons/Enums"
 import postMessage from "@commons/api/postMessage"
 import putMessage from "@commons/api/putMessage"
 import { StyleSheet, Clipboard } from 'react-native';
-
+import {
+  setSelectedBusiness
+} from "@redux"
+import store from '@redux/store';
+import { View } from 'react-native';
+import CompleteOrder from '../CompleteOrder/CompleteOrder';
 export default function Chat({ navigation }) {
   const [messages, setMessages] = useState([]);
   const selectedChat = useSelector(state => state.chat.selectedChat)
   const user = useSelector(state => state.auth.user)
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     setMessages(selectedChat.messages)
@@ -50,81 +56,101 @@ export default function Chat({ navigation }) {
         putMessage(_message)
       }
     }
+    else if (reply.value === "completeOrder") {
+      setModalVisible(true)
+    }
   }
 
   const onRenderBubble = (props) => {
     return (
-      props.currentMessage.isOrder ?
-        <Bubble
-          {...props}
-          wrapperStyle={{
-            right: {
-              backgroundColor: "gold",
-            },
-          }}
-        />
-        :
-        <Bubble
-          {...props}
-        />
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: props.currentMessage.isOrder ? "gold" : "blue",
+          },
+          left: {
+            backgroundColor: "aliceblue",
+          },
+        }}
+      />
     )
   }
 
   const onLongPress = (context, message) => {
-    const options = [
-      'Copy Text',
-      message.isOrder ? 'Mark As Not Order' : 'Mark As Order',
-      'Cancel',
-    ];
+    if (message.user._id === user.sub) {
+      const options = [
+        'Copy Text',
+        message.isOrder ? 'Mark As Not Order' : 'Mark As Order',
+        'Cancel',
+      ];
 
-    const cancelButtonIndex = options.length - 1;
-    context.actionSheet().showActionSheetWithOptions({
-      options,
-      cancelButtonIndex,
-    },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
-            Clipboard.setString(message.text);
-            break;
-          case 1:
-            let messageToOrder = messages.find(_message => _message._id === message._id)
-            if (messageToOrder) {
-              if (messageToOrder.isOrder) {
-                messageToOrder.quickReplies = null
-                messageToOrder.isOrder = false
-                putMessage(messageToOrder)
+      const cancelButtonIndex = options.length - 1;
+      context.actionSheet().showActionSheetWithOptions({
+        options,
+        cancelButtonIndex,
+      },
+        (buttonIndex) => {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(message.text);
+              break;
+            case 1:
+              let copyOfMessages = Object.assign([], messages)
+              let messageToOrder = copyOfMessages.find(_message => _message._id === message._id)
+              if (messageToOrder) {
+                if (messageToOrder.isOrder) {
+                  messageToOrder.quickReplies = null
+                  messageToOrder.isOrder = false
+                  messageToOrder.up = "1"
+                  putMessage(messageToOrder)
+                }
+                else {
+                  messageToOrder.quickReplies = null
+                  messageToOrder.isOrder = true
+                  messageToOrder.up = "2"
+                  putMessage(messageToOrder)
+                }
               }
-              else {
-                messageToOrder.quickReplies = null
-                messageToOrder.isOrder = true
-                putMessage(messageToOrder)
-              }
-            }
-            break;
-        }
-      });
+              break;
+          }
+        })
+    }
+    else {
+
+    }
+  }
+
+  const onPressAvatar = (user) => {
+    store.dispatch(setSelectedBusiness(selectedChat.business));
+    navigation.navigate('BusinessDetail');
   }
 
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={messages => onSend(messages)}
-      user={{
-        ...user,
-        _id: user.sub,
-        name: user.name,
-        avatar: selectedChat && selectedChat.user && selectedChat.user.picture && selectedChat.user.picture,
-      }}
-      showUserAvatar={true}
-      onQuickReply={(e) => { onQuickReply(e) }}
-      renderBubble={onRenderBubble}
-      onLongPress={onLongPress}
-    />
+    <View style={styles.container}>
+      <GiftedChat
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          ...user,
+          _id: user.sub,
+          name: user.name,
+          avatar: selectedChat && selectedChat.user && selectedChat.user.picture && selectedChat.user.picture,
+        }}
+        onQuickReply={(e) => { onQuickReply(e) }}
+        renderBubble={(props) => onRenderBubble(props)}
+        onLongPress={onLongPress}
+        onPressAvatar={onPressAvatar}
+      />
+      <CompleteOrder modalVisible={modalVisible} setModalVisible={setModalVisible} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   messageOrder: {
     backgroundColor: "#d9d9",
   }
