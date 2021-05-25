@@ -5,6 +5,8 @@ import {
 } from "@redux"
 import store from '@redux/store';
 import { useSelector } from 'react-redux';
+import storePng from '../../../../assets/store.png';
+
 
 export default function ChatListItem({ navigation, item }) {
     const user = useSelector(state => state.auth.user)
@@ -19,8 +21,8 @@ export default function ChatListItem({ navigation, item }) {
     return (
         <TouchableOpacity onPress={(e) => { onItemClick(item) }}>
             <View style={styles.listItem}>
-                <Image source={{ uri: item.business.photo }} style={{ width: 60, height: 60, borderRadius: 30 }} />
-                <View style={{ alignItems: "center", flex: 1 }}>
+                <Image source={storePng} style={{ width: 60, height: 60 }} />
+                <View style={{ alignItems: "center", flex: 1, paddingLeft: 16, paddingRight: 16  }}>
                     <Text style={{ fontWeight: "bold" }} numberOfLines={2}>{item.business.name}</Text>
                     {item.messages && item.messages.length > 0 &&
                         <Text>{item.messages[0].user.sub === user.sub ? "you:" + item.messages[0].text : "market:" + item.messages[0].text}</Text>
@@ -37,10 +39,14 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 10,
         backgroundColor: "#FFF",
-        width: "80%",
         flex: 1,
         alignSelf: "center",
         flexDirection: "row",
-        borderRadius: 5
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 4 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+        elevation: 4,
     }
 });

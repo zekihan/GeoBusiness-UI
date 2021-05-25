@@ -8,6 +8,8 @@ import store from '@redux/store';
 import {
   setSelectedBusiness
 } from "@redux"
+import { Image } from "react-native";
+import storePng from '../../../../assets/store.png';
 
 export default function BusinessMapView({ navigation }) {
   const businessList = useSelector((state) => state.business.businessList);
@@ -84,8 +86,9 @@ export default function BusinessMapView({ navigation }) {
             description={business.category}
             onCalloutPress={(e) => goToDetailScreen(business)}
           >
-            <View style={{ backgroundColor: "#f0ffff", padding: 10, borderRadius: 8 }}>
-              <Text style={{ fontSize: 9 }} >{business.name.length > 10 ? business.name.substring(0, 10) + "..." : business.name}</Text>
+            <View style={{ backgroundColor: "transparent", borderRadius: 8, flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <Image style={styles.avatar} source={storePng} />
+              <Text style={{ fontSize: 12, fontWeight: "bold" }} >{business.name.length > 10 ? business.name.substring(0, 10) + "..." : business.name}</Text>
             </View>
           </MapView.Marker>
         ))}
@@ -98,5 +101,9 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+  },
+  avatar: {
+    width: 30,
+    height: 30,
   },
 });

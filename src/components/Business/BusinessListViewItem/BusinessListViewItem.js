@@ -7,6 +7,7 @@ import { Text } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View } from 'react-native';
 import { Image } from 'react-native';
+import storePng from '../../../../assets/store.png';
 
 export default function BusinessListViewItem({ navigation, item }) {
     const goToDetailScreen = (item) => {
@@ -19,8 +20,8 @@ export default function BusinessListViewItem({ navigation, item }) {
     return (
         <TouchableOpacity onPress={(e) => { goToDetailScreen(item) }}>
             <View style={styles.listItem}>
-                <Image source={{ uri: item.photo }} style={{ width: 60, height: 60, borderRadius: 30 }} />
-                <View style={{ alignItems: "center", flex: 1 }}>
+                <Image source={storePng} style={{ width: 60, height: 60 }} />
+                <View style={{ alignItems: "center", flex: 1, paddingLeft: 16, paddingRight: 16 }}>
                     <Text style={{ fontWeight: "bold", alignSelf: "flex-start" }} numberOfLines={2}>{item.name}</Text>
                     <Text style={{ fontWeight: "300", alignSelf: "flex-end" }} numberOfLines={2}>category: {item.category}</Text>
                 </View>
@@ -31,13 +32,18 @@ export default function BusinessListViewItem({ navigation, item }) {
 
 const styles = StyleSheet.create({
     listItem: {
-        margin: 2,
+        margin: 5,
         padding: 10,
         backgroundColor: "#FFF",
         width: "100%",
         flex: 1,
         alignSelf: "center",
         flexDirection: "row",
-        borderRadius: 5
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 4 },
+        shadowOpacity: 0.8,
+        shadowRadius: 5,
+        elevation: 4,
     }
 });

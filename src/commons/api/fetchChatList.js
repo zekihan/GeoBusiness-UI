@@ -6,6 +6,7 @@ import {
   fetchChatFailure,
 } from "@redux";
 import store from "@redux/store";
+import storePng from '../../../assets/store.png';
 
 export default function fetchChatList() {
   const state = store.getState()
@@ -22,7 +23,7 @@ export default function fetchChatList() {
           longitude: 27.1909385,
         },
         name: "market market market market market market market market market market market market market market ",
-        photo: "https://cdn0.iconfinder.com/data/icons/leto-ui-generic-2/64/leto_ui_2-01-512.png",
+        photo: "https://img-premium.flaticon.com/png/512/123/123403.png?token=exp=1621971607~hmac=4d663fb5f6aad537fa8ad062faf815b9",
         category: "Market",
         email: "market1@email.com",
         phone: "1223132132123",

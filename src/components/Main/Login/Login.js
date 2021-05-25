@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Input } from "react-native-elements";
 import Address from "../Address/Address";
+import logo from '../../../../assets/logo.png';
+import { Image } from "react-native";
 
 const auth0ClientId = "0RkrbD08xD6Bi1DuGrWPKSsDdlpiF1VU"
 const authorizationEndpoint = "https://geobusiness.eu.auth0.com/authorize"
@@ -98,20 +100,28 @@ export default function Main({ navigation }) {
 
     return (
         <View style={styles.container}>
-            {auth ? (
-                <>
-                    <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text>
-                    <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} />
-                    <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
-                    <Address modalVisible={modalVisible} setModalVisible={setModalVisible} />
-                </>
-            ) : (
-                <Button
-                    disabled={!request}
-                    title="Log in with Auth0"
-                    onPress={() => promptAsync({ useProxy })}
-                />
-            )}
+            <>
+                <Image style={{ height: 200, width: 200, marginBottom: 200 }} source={logo} />
+                {auth ? (
+                    <>
+                        {/* <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text>
+                        <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} /> */}
+                        <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
+                        <Address modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                    </>
+                ) : (
+                    <View style={{ width: 150 }}>
+                        <Button
+                            disabled={!request}
+                            title="Log in"
+                            onPress={() => promptAsync({ useProxy })}
+                            color="#244397"
+                        />
+                    </View>
+
+
+                )}
+            </>
         </View>
     )
 }

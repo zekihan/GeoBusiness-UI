@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat, MessageText } from 'react-native-gifted-chat';
 import { useSelector } from 'react-redux';
 import { IS_ORDER_STRING_SET } from "@commons/Enums"
 import postMessage from "@commons/api/postMessage"
@@ -12,6 +12,11 @@ import {
 import store from '@redux/store';
 import { View } from 'react-native';
 import CompleteOrder from '../CompleteOrder/CompleteOrder';
+import { Text } from 'react-native';
+import storePng from '../../../../assets/store.png';
+import { Image } from 'react-native';
+import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
+
 export default function Chat({ navigation }) {
   const [messages, setMessages] = useState([]);
   const selectedChat = useSelector(state => state.chat.selectedChat)
@@ -67,15 +72,31 @@ export default function Chat({ navigation }) {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: props.currentMessage.isOrder ? "gold" : "blue",
+            backgroundColor: props.currentMessage.isOrder ? "#303f9f" : "#1976d2",
+            textColor: "#fff",
           },
           left: {
-            backgroundColor: "aliceblue",
+            backgroundColor: "#1976d2",
+            textColor: "#fff",
           },
         }}
       />
     )
   }
+
+  const onRenderMessageText = (props) => (
+    <MessageText
+      {...props}
+      textStyle={{
+        left: { color: '#fff' },
+        right: { color: '#fff' },
+      }}
+      linkStyle={{
+      left: { color: 'orange' },
+      right: { color: 'orange' },
+    }}
+    />
+  );
 
   const onLongPress = (context, message) => {
     if (message.user._id === user.sub) {
@@ -139,6 +160,7 @@ export default function Chat({ navigation }) {
         }}
         onQuickReply={(e) => { onQuickReply(e) }}
         renderBubble={(props) => onRenderBubble(props)}
+        renderMessageText={(props) => onRenderMessageText(props)}
         onLongPress={onLongPress}
         onPressAvatar={onPressAvatar}
       />
@@ -150,8 +172,5 @@ export default function Chat({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  messageOrder: {
-    backgroundColor: "#d9d9",
   }
 });

@@ -12,6 +12,7 @@ import {
   fetchChatSuccess,
 } from "@redux"
 import store from '@redux/store';
+import storePng from '../../../../assets/store.png';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -49,8 +50,8 @@ export default function BusinessDetail({ navigation }) {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={[styles.card, styles.profileCard]}>
-          <Image style={styles.avatar} source={{ uri: "https://bootdey.com/img/Content/avatar/avatar6.png" }} />
+        <View style={styles.profileCard}>
+          <Image style={styles.avatar} source={storePng} />
           <View style={styles.detailName}>
             <Text style={styles.name} numberOfLines={2}>{selectedBusiness.name}</Text>
             <StarRating
@@ -105,7 +106,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#DCDCDC"
+    paddingTop: 16,
+    height: "100%"
   },
   cardTittle: {
     color: "#808080",
@@ -124,8 +126,11 @@ const styles = StyleSheet.create({
   },
   profileCard: {
     height: 200,
-    marginTop: 20,
-    flexDirection: "row"
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 10,
+
   },
   detailName: {
     padding: 10,

@@ -17,10 +17,14 @@ import {
 } from "@redux"
 import store from '@redux/store'
 import moment from 'moment';
+import { useSelector } from "react-redux";
+import Login from "@components/Main/Login/Login";
 
 const Tab = createBottomTabNavigator();
 
 export default function Layout() {
+
+    const auth = useSelector((state) => state.auth.auth);
 
     useEffect(() => {
         let fileUri = FileSystem.documentDirectory + "token";
@@ -63,27 +67,30 @@ export default function Layout() {
     }, [])
 
     return (
-        <Tab.Navigator initialRouteName="Main"
-            screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                    if (route.name === 'Main') {
-                        return <MaterialCommunityIcons name="home" size={size} color={color} />
-                    } else if (route.name === 'Business') {
-                        return <MaterialCommunityIcons name="google-my-business" size={size} color={color} />
-                    }
-                    else if (route.name === 'Chat') {
-                        return <MaterialCommunityIcons name="chat" size={size} color={color} />
-                    }
-                },
-            })}
-            tabBarOptions={{
-                activeTintColor: 'tomato',
-                inactiveTintColor: 'gray',
-                keyboardHidesTabBar: true,
-            }}>
-            <Tab.Screen name="Main" component={MainStack} />
-            <Tab.Screen name="Business" component={BusinessStack} />
-            <Tab.Screen name="Chat" component={ChatStack} />
-        </Tab.Navigator>
+        auth ?
+            <Tab.Navigator initialRouteName="Main"
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                        if (route.name === 'Main') {
+                            return <MaterialCommunityIcons name="home" size={size} color={color} />
+                        } else if (route.name === 'Business') {
+                            return <MaterialCommunityIcons name="google-my-business" size={size} color={color} />
+                        }
+                        else if (route.name === 'Chat') {
+                            return <MaterialCommunityIcons name="chat" size={size} color={color} />
+                        }
+                    },
+                })}
+                tabBarOptions={{
+                    activeTintColor: "#1976d2",
+                    inactiveTintColor: 'gray',
+                    keyboardHidesTabBar: true,
+                }}>
+                <Tab.Screen name="Main" component={MainStack} />
+                <Tab.Screen name="Business" component={BusinessStack} />
+                <Tab.Screen name="Chat" component={ChatStack} />
+            </Tab.Navigator>
+            :
+            <Login />
     );
 }

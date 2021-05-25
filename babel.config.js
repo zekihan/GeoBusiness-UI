@@ -12,6 +12,7 @@ module.exports = function (api) {
             "@commons": "./src/commons",
             "@redux": "./src/redux",
             "@helpers": "./src/helpers",
+            "@assets": "./assets",
           },
         },
       ],
