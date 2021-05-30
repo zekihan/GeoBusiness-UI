@@ -13,6 +13,9 @@ import {
 } from "@redux"
 import store from '@redux/store';
 import storePng from '../../../../assets/store.png';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { Pressable } from "react-native";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -50,32 +53,50 @@ export default function BusinessDetail({ navigation }) {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.profileCard}>
-          <Image style={styles.avatar} source={storePng} />
-          <View style={styles.detailName}>
-            <Text style={styles.name} numberOfLines={2}>{selectedBusiness.name}</Text>
-            <StarRating
-              disabled={true}
-              maxStars={5}
-              emptyStar={'star-outline'}
-              fullStar={'star'}
-              halfStar={'star-half-full'}
-              iconSet={'MaterialCommunityIcons'}
-              rating={selectedBusiness.rate}
-              fullStarColor={'gold'}
-            />
-            <Button title="Chat" onPress={onChat} />
+        <View style={[styles.profileCard, { flex: 1, flexDirection: 'column' }]}>
+          <View style={[{ flex: 1, flexDirection: 'row' }]}>
+            <Image style={styles.avatar} source={storePng} />
+            <View style={styles.detailName}>
+              <Text style={[styles.name, { marginBottom: 8, textAlign: "center", fontWeight: 'bold' }]} numberOfLines={2}>{selectedBusiness.name}</Text>
+              <StarRating
+                starSize={30}
+                disabled={true}
+                maxStars={5}
+                emptyStar={'star-outline'}
+                fullStar={'star'}
+                halfStar={'star-half-full'}
+                iconSet={'MaterialCommunityIcons'}
+                rating={selectedBusiness.rate}
+                fullStarColor={'gold'}
+              />
+              <View style={{ marginTop: 8, flex: 1, flexDirection: 'row' }}>
+                <View style={{ marginRight: 8 }}>
+                  <FontAwesome5 name="coins" size={18} color="#616161" />
+                  <Text style={{ marginBottom: 8, fontSize: 18, color: "#616161", }} numberOfLines={2}>{selectedBusiness.minOrderCost}</Text>
+                </View>
+                <Pressable
+                  style={[styles.centeredView, { flex: 1, flexDirection: 'row', borderWidth: 2, borderColor: "#1976d2", borderRadius: 8, padding: 8, width: 100, height: 40, justifyContent: 'center', alignItems: 'center' }]}
+                  activeOpacity={1}
+                  onPress={onChat}
+                >
+                  <Entypo name="chat" size={24} color="#1976d2" />
+                  <Text style={{ marginLeft: 8, fontSize: 18, color: "#616161", }} numberOfLines={2}>Chat</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+          <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 120 }]}>
+            <Text style={[{ marginBottom: 8, color: "#616161", fontSize: 18, }]}>Work Hours: 8.00 - 17.00</Text>
           </View>
         </View>
 
         <View style={styles.card}>
           <Text style={styles.cardTittle}>Information</Text>
-          <Text>category: {selectedBusiness.category}</Text>
-          <Text>email: {selectedBusiness.email}</Text>
-          <Text>phone: {selectedBusiness.phone}</Text>
-          <Text>authorizedPerson: {selectedBusiness.authorizedPerson}</Text>
-          <Text>minOrderCost: {selectedBusiness.minOrderCost}</Text>
-          <Text>maxServiceRange: {selectedBusiness.maxServiceRange}</Text>
+          <Text style={[{ fontWeight: "700", fontSize: 14, marginBottom: 2 }]}>Category: {selectedBusiness.category}</Text>
+          <Text style={[{ fontWeight: "700", fontSize: 14, marginBottom: 2 }]}>Email: {selectedBusiness.email}</Text>
+          <Text style={[{ fontWeight: "700", fontSize: 14, marginBottom: 2 }]}>Phone: {selectedBusiness.phone}</Text>
+          <Text style={[{ fontWeight: "700", fontSize: 14, marginBottom: 2 }]}>Authorized Person: {selectedBusiness.authorizedPerson}</Text>
+          <Text style={[{ fontWeight: "700", fontSize: 14, marginBottom: 2 }]}>Delivery: {selectedBusiness.maxServiceRange ? "yes" : "no"}</Text>
         </View>
         {
           selectedBusiness.products.map((category) => {

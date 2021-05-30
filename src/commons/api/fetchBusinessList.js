@@ -19,7 +19,7 @@ export default function fetchBusinessList() {
         latitude: 38.4222986,
         longitude: 27.1909385,
       },
-      name: "market market market market market market market market market market market market market market ",
+      name: "Valley Market",
       photo: "https://cdn0.iconfinder.com/data/icons/leto-ui-generic-2/64/leto_ui_2-01-512.png",
       category: "Market",
       email: "market1@email.com",
@@ -44,12 +44,12 @@ export default function fetchBusinessList() {
     {
       id: 2,
       location: {
-        latitude: 38.4242986,
+        latitude: 38.4232986,
         longitude: 27.1909385,
       },
-      name: "market 2",
+      name: "Sunrise Mart",
       photo: "https://cdn0.iconfinder.com/data/icons/leto-ui-generic-2/64/leto_ui_2-01-512.png",
-      category: "Market",
+      category: "Grocery",
       email: "market1@email.com",
       phone: "1223132132123",
       img: null,
@@ -75,9 +75,9 @@ export default function fetchBusinessList() {
         latitude: 38.4232986,
         longitude: 27.1939385,
       },
-      name: "market 3",
+      name: "Bolinuvo Bakery",
       photo: "https://cdn0.iconfinder.com/data/icons/leto-ui-generic-2/64/leto_ui_2-01-512.png",
-      category: "Market",
+      category: "Bakery",
       email: "market1@email.com",
       phone: "1223132132123",
       img: null,
@@ -87,12 +87,12 @@ export default function fetchBusinessList() {
       products:
         [
           {
-            category: "meyve",
-            items: ["elma", "armut"]
+            category: "Breads‎",
+            items: ["Bagel", "Banana bread", , "Bazlama"]
           },
           {
-            category: "kuru bakliyat",
-            items: ["pilav", "makarna"]
+            category: "Cakes",
+            items: ["Cheesecake", "Butter cake"]
           }
         ],
       rate: 3.2

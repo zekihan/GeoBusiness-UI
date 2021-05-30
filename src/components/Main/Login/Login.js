@@ -104,8 +104,8 @@ export default function Main({ navigation }) {
                 <Image style={{ height: 200, width: 200, marginBottom: 200 }} source={logo} />
                 {auth ? (
                     <>
-                        {/* <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text>
-                        <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} /> */}
+                        {/* <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text> */}
+                        <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} />
                         <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
                         <Address modalVisible={modalVisible} setModalVisible={setModalVisible} />
                     </>
