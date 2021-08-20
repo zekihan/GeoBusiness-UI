@@ -5,7 +5,9 @@ import { Provider } from "react-redux";
 import Layout from "@components/Layout/Layout";
 import store from "@redux/store";
 import { RootSiblingParent } from 'react-native-root-siblings';
-
+import { LogBox } from "react-native";
+console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true)
 export default function App() {
   return (
     <RootSiblingParent>

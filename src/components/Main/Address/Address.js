@@ -8,13 +8,26 @@ import * as Location from "expo-location";
 import { Input } from "react-native-elements";
 import Toast from "react-native-root-toast";
 import { Pressable } from "react-native";
+import postCustomer from "@commons/api/postCustomer"
+import { useSelector } from "react-redux";
 
 export default function Address({
     modalVisible,
     setModalVisible
 }) {
+    const user = useSelector((state) => state.auth.user);
 
     const [address, setAddress] = useState(null);
+    const [name, set_name] = useState(null);
+    const [phone, set_phone] = useState(null);
+    const [country, set_country] = useState(null);
+    const [region, set_region] = useState(null);
+    const [subregion, set_subregion] = useState(null);
+    const [district, set_district] = useState(null);
+    const [street, set_street] = useState(null);
+    const [outsideDoor, set_outsideDoor] = useState(null);
+    const [floor, set_floor] = useState(null);
+    const [insideDoor, set_insideDoor] = useState(null);
     const [loc, setLoc] = useState({
         locationResult: null,
         location: {
@@ -57,6 +70,12 @@ export default function Address({
     const onReverse = async () => {
         let location2 = await Location.reverseGeocodeAsync(loc.location.coords);
         setAddress(location2[0])
+        set_country(location2[0] && location2[0].country && location2[0].country)
+        set_region(location2[0] && location2[0].region && location2[0].region)
+        set_subregion(location2[0] && location2[0].subregion && location2[0].subregion)
+        set_district(location2[0] && location2[0].district && location2[0].district)
+        set_street(location2[0] && location2[0].street && location2[0].street)
+        set_outsideDoor(location2[0] && location2[0].name && location2[0].name)
     }
 
     useEffect(() => {
@@ -66,9 +85,15 @@ export default function Address({
 
     const onSubmit = () => {
         setModalVisible(false);
-        Toast.show('Request failed to send.', {
-            duration: Toast.durations.LONG,
-        });
+        let arr = [country, region, subregion, district, street, outsideDoor, floor, insideDoor].join()
+        postCustomer({
+            id: user.sub,
+            name: name ? name : "",
+            phone: phone ? phone : "",
+            address: arr,
+            photo: user.picture ? user.picture : "",
+            email: "email"
+        })
     }
 
     return (
@@ -82,25 +107,23 @@ export default function Address({
             }}
             style={styles.modal}
         >
-            <Pressable
-                style={styles.centeredView}
-                activeOpacity={1}
-                onPress={() => { setModalVisible(!modalVisible) }}
-            >
+            <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <ScrollView style={styles.scrollView}>
-                        <Input name="country" label="Ülke" style={{ margin: 10 }} defaultValue={address && address.country && address.country}></Input>
-                        <Input name="region" label="İl" style={{ margin: 10 }} defaultValue={address && address.region && address.region}></Input>
-                        <Input name="subregion" label="İlçe" style={{ margin: 10 }} defaultValue={address && address.subregion && address.subregion}></Input>
-                        <Input name="district" label="Mahalle" style={{ margin: 10 }} defaultValue={address && address.district && address.district}></Input>
-                        <Input name="street" label="Sokak" style={{ margin: 10 }} defaultValue={address && address.street && address.street}></Input>
-                        <Input name="name" label="Kapı No" style={{ margin: 10 }} defaultValue={address && address.name && address.name}></Input>
-                        <Input name="street" label="Kat" style={{ margin: 10 }}></Input>
-                        <Input name="street" label="Daire" style={{ margin: 10 }}></Input>
+                        <Input name="name" label="Name" style={{ margin: 10 }} onChangeText={name => set_name(name)} value={name}></Input>
+                        <Input name="phone" label="Phone" style={{ margin: 10 }} onChangeText={phone => set_phone(phone)} value={phone}></Input>
+                        <Input name="country" label="Ülke" style={{ margin: 10 }} onChangeText={country => set_country(country)} value={country} defaultValue={address && address.country && address.country}></Input>
+                        <Input name="region" label="İl" style={{ margin: 10 }} onChangeText={region => set_region(region)} value={region} defaultValue={address && address.region && address.region}></Input>
+                        <Input name="subregion" label="İlçe" style={{ margin: 10 }} onChangeText={subregion => set_subregion(subregion)} value={subregion} defaultValue={address && address.subregion && address.subregion}></Input>
+                        <Input name="district" label="Mahalle" style={{ margin: 10 }} onChangeText={district => set_district(district)} value={district} defaultValue={address && address.district && address.district}></Input>
+                        <Input name="street" label="Sokak" style={{ margin: 10 }} onChangeText={street => set_street(street)} value={street} defaultValue={address && address.street && address.street}></Input>
+                        <Input name="outsideDoor" label="Kapı No" style={{ margin: 10 }} onChangeText={outsideDoor => set_outsideDoor(outsideDoor)} value={outsideDoor} defaultValue={address && address.name && address.name}></Input>
+                        <Input name="floor" label="Kat" style={{ margin: 10 }} onChangeText={floor => set_floor(floor)} value={floor}></Input>
+                        <Input name="insideDoor" label="Daire" style={{ margin: 10 }} onChangeText={insideDoor => set_insideDoor(insideDoor)} value={insideDoor}></Input>
                     </ScrollView>
                     <Button style={styles.button} title="Submit" onPress={(e) => onSubmit(e)} />
                 </View>
-            </Pressable>
+            </View>
         </Modal>
     );
 };

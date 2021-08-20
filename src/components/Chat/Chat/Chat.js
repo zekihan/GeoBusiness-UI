@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Bubble, GiftedChat, MessageText } from 'react-native-gifted-chat';
+import { Bubble, GiftedAvatar, GiftedChat, MessageText } from 'react-native-gifted-chat';
 import { useSelector } from 'react-redux';
 import { IS_ORDER_STRING_SET } from "@commons/Enums"
 import postMessage from "@commons/api/postMessage"
@@ -16,12 +16,15 @@ import { Text } from 'react-native';
 import storePng from '../../../../assets/store.png';
 import { Image } from 'react-native';
 import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
+import StarRating from "react-native-star-rating";
 
 export default function Chat({ navigation }) {
   const [messages, setMessages] = useState([]);
   const selectedChat = useSelector(state => state.chat.selectedChat)
   const user = useSelector(state => state.auth.user)
   const [modalVisible, setModalVisible] = useState(false);
+  const [_reply, _setReply] = useState(null);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     setMessages(selectedChat.messages)
@@ -47,22 +50,45 @@ export default function Chat({ navigation }) {
 
   const onSend = useCallback((messages = []) => {
     let _message = isOrder(messages[0])
+    _message.isOrder = false
+    _message.from = _message.user._id
+    _message.to = _message.businessId
     postMessage(_message)
   }, [])
 
   const onQuickReply = (e) => {
     let reply = e[0]
+    _setReply(reply)
     if (reply.value === "order") {
+      setModalVisible(true)
+    }
+    else if (reply.value === "completeOrder") {
       let _message = messages.find(message => message._id === reply.messageId)
 
       if (_message) {
         _message.quickReplies = null
-        _message.isOrder = true
+        _message.isAccepted = true
         putMessage(_message)
       }
     }
-    else if (reply.value === "completeOrder") {
-      setModalVisible(true)
+  }
+
+  const onSubmitPress = (v1, v2) => {
+    let _message = messages.find(message => message._id === _reply.messageId)
+
+    if (_message) {
+      _message.quickReplies = null
+      putMessage(_message)
+      _message2 = Object.assign({}, _message)
+      _message2._id = "order" + _message2._id
+      _message2.isOrder = true
+      _message2.payment = v1
+      _message2.service = v2
+      _message2.text = `${_message2.text}
+${v1 ? "Self Service" : "Carrier"}
+${v2 ? "Credit Card" : "Cash"}
+address`
+      postMessage(_message2)
     }
   }
 
@@ -92,9 +118,9 @@ export default function Chat({ navigation }) {
         right: { color: '#fff' },
       }}
       linkStyle={{
-      left: { color: 'orange' },
-      right: { color: 'orange' },
-    }}
+        left: { color: 'orange' },
+        right: { color: 'orange' },
+      }}
     />
   );
 
@@ -147,6 +173,29 @@ export default function Chat({ navigation }) {
     navigation.navigate('BusinessDetail');
   }
 
+  const renderSystemMessage = (props) => {
+    return (
+      <View style={{ padding: 20, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Please Rate</Text>
+        <StarRating
+          starSize={30}
+          maxStars={5}
+          emptyStar={'star-outline'}
+          fullStar={'star'}
+          halfStar={'star-half-full'}
+          iconSet={'MaterialCommunityIcons'}
+          fullStarColor={'gold'}
+          rating={rating}
+          selectedStar={(rate) => selectedStar(rate)}
+        />
+      </View>
+    )
+  }
+
+  const selectedStar = (rate) => {
+    setRating(rate)
+  }
+
   return (
     <View style={styles.container}>
       <GiftedChat
@@ -158,13 +207,15 @@ export default function Chat({ navigation }) {
           name: user.name,
           avatar: selectedChat && selectedChat.user && selectedChat.user.picture && selectedChat.user.picture,
         }}
+        renderAvatar={null}
         onQuickReply={(e) => { onQuickReply(e) }}
         renderBubble={(props) => onRenderBubble(props)}
         renderMessageText={(props) => onRenderMessageText(props)}
         onLongPress={onLongPress}
         onPressAvatar={onPressAvatar}
+        renderSystemMessage={(props) => renderSystemMessage(props)}
       />
-      <CompleteOrder modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <CompleteOrder modalVisible={modalVisible} setModalVisible={setModalVisible} onSubmitPress={onSubmitPress} />
     </View>
   );
 }

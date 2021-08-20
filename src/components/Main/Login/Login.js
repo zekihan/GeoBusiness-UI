@@ -49,9 +49,12 @@ export default function Main({ navigation }) {
     // console.log(`Redirect URL: ${redirectUri}`)
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [first, setFirst] = useState(true);
 
     useEffect(() => {
         if (result) {
+            setModalVisible(true)
+
             if (result.error) {
                 Alert.alert(
                     "Authentication error",
@@ -63,6 +66,7 @@ export default function Main({ navigation }) {
             if (result.type === "success") {
                 const _jwtToken = result.params.id_token
 
+                setModalVisible(true)
                 let fileUri = FileSystem.documentDirectory + "token";
                 FileSystem.writeAsStringAsync(fileUri, _jwtToken, { encoding: FileSystem.EncodingType.UTF8 })
                     .then(() => {
@@ -70,6 +74,8 @@ export default function Main({ navigation }) {
                         store.dispatch(setUser(decoded))
                         store.dispatch(setToken(_jwtToken))
                         store.dispatch(setAuth(true))
+                        setModalVisible(true)
+
                     })
                     .catch(error => {
                         console.error(error);
@@ -80,6 +86,8 @@ export default function Main({ navigation }) {
 
     useEffect(() => {
         if (auth) {
+            setModalVisible(true)
+
             fetchBusinessList()
             fetchChatList()
         }
@@ -105,8 +113,8 @@ export default function Main({ navigation }) {
                 {auth ? (
                     <>
                         {/* <Text style={{ margin: 10 }}>You are logged in, {user.name}!</Text> */}
-                        <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} />
-                        <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} />
+                        {/* <Button style={{ margin: 10 }} title="Get Address" onPress={(e) => setModalVisible(true)} />
+                        <Button style={{ margin: 10 }} title="Log out" onPress={onLogout} /> */}
                         <Address modalVisible={modalVisible} setModalVisible={setModalVisible} />
                     </>
                 ) : (

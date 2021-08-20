@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-picker/picker": "^1.16.1",
     "@react-navigation/bottom-tabs": "^5.11.8",
     "@react-navigation/drawer": "^5.12.4",
     "@react-navigation/native": "^5.9.3",
@@ -29,6 +30,7 @@
     "react-dom": "17.0.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-auth0": "^2.7.0",
+    "react-native-dropdown-picker": "^5.1.19",
     "react-native-elements": "^3.3.1",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-gifted-chat": "^0.16.3",
@@ -43,9 +45,11 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.15.0",
     "react-redux": "^7.2.2",
+    "react-stomp": "^5.1.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
-    "remote-redux-devtools": "^0.5.16"
+    "remote-redux-devtools": "^0.5.16",
+    "sockjs": "^0.3.21"
   },
   "devDependencies": {
     "@babel/core": "~7.13.10",

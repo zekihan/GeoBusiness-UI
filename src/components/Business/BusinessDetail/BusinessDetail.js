@@ -16,6 +16,7 @@ import storePng from '../../../../assets/store.png';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Pressable } from "react-native";
+import moment from "moment";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -86,7 +87,7 @@ export default function BusinessDetail({ navigation }) {
             </View>
           </View>
           <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 120 }]}>
-            <Text style={[{ marginBottom: 8, color: "#616161", fontSize: 18, }]}>Work Hours: 8.00 - 17.00</Text>
+            <Text style={[{ marginBottom: 8, color: "#616161", fontSize: 18, }]}>Work Hours: {selectedBusiness.openingTime} - {selectedBusiness.closingTime}</Text>
           </View>
         </View>
 
